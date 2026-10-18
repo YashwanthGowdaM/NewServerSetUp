@@ -33,11 +33,7 @@ echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.
 > /etc/apt/sources.list.d/jenkins.list
 
 apt update -y
-
-echo "======================================="
 echo "Installing Jenkins..."
-echo "======================================="
-
 apt install -y jenkins
 
 systemctl daemon-reload
@@ -47,69 +43,33 @@ systemctl start jenkins
 echo "Waiting for Jenkins to initialize..."
 sleep 20
 
-echo "======================================="
 echo "Downloading Jenkins Backup..."
-echo "======================================="
-
 cd /tmp
-
 curl -u downloader:Yash@123 -O "$BACKUP_URL"
 
-echo "======================================="
 echo "Stopping Jenkins..."
-echo "======================================="
-
 systemctl stop jenkins
-
-echo "======================================="
 echo "Cleaning Existing Jenkins Data..."
-echo "======================================="
-
 rm -rf /var/lib/jenkins/*
 
-echo "======================================="
 echo "Restoring Backup..."
-echo "======================================="
-
 tar -xzf "$BACKUP_FILE" -C /var/lib/jenkins
 
-echo "======================================="
 echo "Fixing Permissions..."
-echo "======================================="
-
 chown -R jenkins:jenkins /var/lib/jenkins
 
-echo "======================================="
 echo "Starting Jenkins..."
-echo "======================================="
-
 systemctl start jenkins
 
 sleep 20
+echo ""
 
 ############################################################
 # OUTPUT
 ############################################################
 
 STATUS=$(systemctl is-active jenkins)
-
-PUBLIC_IP=$(curl -s http://checkip.amazonaws.com)
-
-if [ -z "$PUBLIC_IP" ]; then
-    PUBLIC_IP=$(curl -s https://ifconfig.me)
-fi
-
-if [ -z "$PUBLIC_IP" ]; then
-    PUBLIC_IP=$(curl -s https://icanhazip.com)
-fi
-
-PORT=$(grep -- '--httpPort=' /usr/lib/systemd/system/jenkins.service \
-| sed -E 's/.*--httpPort=([0-9]+).*/\1/')
-
-if [ -z "$PORT" ]; then
-    PORT=8080
-fi
-
+IP_ADDR="$(curl ifconfig.me)"
 PASSWORD_FILE="/var/lib/jenkins/secrets/initialAdminPassword"
 
 echo
@@ -117,7 +77,7 @@ echo "=========================================="
 echo " Jenkins Installation Completed"
 echo "=========================================="
 echo "Jenkins Status : $STATUS"
-echo "URL            : http://$IP:$PORT"
+echo "URL            : http://$IP_ADDR:8080"
 
 if [ -f "$PASSWORD_FILE" ]; then
     echo "Initial Password:"
