@@ -2,7 +2,7 @@
 
 set -e
 
-BACKUP_URL="http://129.159.237.133/artifacts/jenkins_backup_v1.tar.gz"
+BACKUP_URL="http://129.159.237.133/artifacts/Jenkins/jenkins_backup_v1.tar.gz"
 BACKUP_USER="mygart"
 BACKUP_PASS="Yash@123"
 
