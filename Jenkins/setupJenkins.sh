@@ -3,6 +3,9 @@
 set -e
 
 BACKUP_URL="http://129.159.237.133/artifacts/jenkins_backup.tar.gz"
+BACKUP_USER="downloader"
+BACKUP_PASS="Yash@123"
+
 WORK_DIR="/opt/automation"
 BACKUP_FILE="${WORK_DIR}/jenkins_backup.tar.gz"
 
@@ -10,15 +13,17 @@ echo "Updating packages..."
 apt update -y
 
 echo "Installing Java..."
-apt install -y openjdk-21-jdk
+apt install -y openjdk-21-jdk curl gnupg -qq
 
 echo "Adding Jenkins repository..."
 mkdir -p /etc/apt/keyrings
 
+rm -f /etc/apt/sources.list.d/jenkins.list
+
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key \
 | tee /etc/apt/keyrings/jenkins-keyring.asc >/dev/null
 
-cat <<EOF >/etc/apt/sources.list.d/jenkins.list
+cat >/etc/apt/sources.list.d/jenkins.list <<EOF
 deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/
 EOF
 
@@ -38,7 +43,7 @@ echo "Creating working directory..."
 mkdir -p "$WORK_DIR"
 
 echo "Downloading Jenkins backup..."
-curl -u downloader:Yash@123 -o "$BACKUP_FILE" "$BACKUP_URL"
+curl -u "${BACKUP_USER}:${BACKUP_PASS}" -o "$BACKUP_FILE" "$BACKUP_URL"
 
 echo "Stopping Jenkins..."
 systemctl stop jenkins
@@ -55,13 +60,12 @@ chown -R jenkins:jenkins /var/lib/jenkins
 echo "Starting Jenkins..."
 systemctl start jenkins
 
-sleep 20
+echo "Waiting for Jenkins..."
+sleep 30
 
 STATUS=$(systemctl is-active jenkins)
 
-PORT=$(grep -oP '(?<=--httpPort=)\d+' /usr/lib/systemd/system/jenkins.service 2>/dev/null)
-
-[ -z "$PORT" ] && PORT=8080
+PORT=8080
 
 PUBLIC_IP=$(curl -s ifconfig.me)
 
@@ -73,10 +77,5 @@ PASSWORD_FILE="/var/lib/jenkins/secrets/initialAdminPassword"
 
 echo
 echo "Jenkins Status : $STATUS"
-echo "URL            : http://$PUBLIC_IP:$PORT"
-
-if [ -f "$PASSWORD_FILE" ]; then
-    echo "Initial Password: $(cat "$PASSWORD_FILE")"
-else
-    echo "Initial Password: Not Available (Backup Restored)"
-fi
+echo "URL            : http://${PUBLIC_IP}:${PORT}"
+echo "Password       : Admin@12345"
