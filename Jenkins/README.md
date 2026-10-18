@@ -11,13 +11,7 @@ curl -O https://raw.githubusercontent.com/YashwanthGowdaM/NewServerSetUp/main/Je
 ## Make the Script Executable
 
 ```bash
-chmod +x setupJenkins.sh
-```
-
-## Run the Script
-
-```bash
-sudo ./setupJenkins.sh
+chmod +x setupJenkins.sh && sudo ./setupJenkins.sh
 ```
 
 ## Script Output
