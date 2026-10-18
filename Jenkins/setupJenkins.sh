@@ -2,12 +2,12 @@
 
 set -e
 
-BACKUP_URL="http://129.159.237.133/artifacts/jenkins_backup.tar.gz"
-BACKUP_USER="downloader"
+BACKUP_URL="http://129.159.237.133/artifacts/jenkins_backup_v1.tar.gz"
+BACKUP_USER="mygart"
 BACKUP_PASS="Yash@123"
 
 WORK_DIR="/opt/automation"
-BACKUP_FILE="${WORK_DIR}/jenkins_backup.tar.gz"
+BACKUP_FILE="${WORK_DIR}/jenkins_backup_v1.tar.gz"
 
 echo "Updating packages..."
 apt update -y
