@@ -5,8 +5,8 @@ This script installs and configures Jenkins on Ubuntu.
 ## Download the Script
 
 ```bash
-curl -O https://raw.githubusercontent.com/YashwanthGowdaM/NewServerSetUp/main/Jenkins/setupJenkins.sh \
-chmod +x setupJenkins.sh \
+curl -O https://raw.githubusercontent.com/YashwanthGowdaM/NewServerSetUp/main/Jenkins/setupJenkins.sh ;
+chmod +x setupJenkins.sh ;
 sudo ./setupJenkins.sh
 ```
 
