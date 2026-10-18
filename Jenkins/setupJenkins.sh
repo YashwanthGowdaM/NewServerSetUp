@@ -44,7 +44,9 @@ echo "Waiting for Jenkins to initialize..."
 sleep 20
 
 echo "Downloading Jenkins Backup..."
-cd /tmp
+sudo mkdir /opt/automation/
+sudo chmod 777  /opt/automation/
+cd  /opt/automation/
 curl -u downloader:Yash@123 -O "$BACKUP_URL"
 
 echo "Stopping Jenkins..."
