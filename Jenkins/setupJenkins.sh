@@ -40,7 +40,7 @@ echo "Waiting for Jenkins to start..."
 sleep 20
 
 echo "Creating working directory..."
-mkdir -p "$WORK_DIR"
+mkdir -p "$WORK_DIR" && cd "$WORK_DIR"
 
 echo "Downloading Jenkins backup..."
 curl -u mygart:'Yash@123' -O 'http://129.159.237.133/artifacts/Jenkins/jenkins_backup_v1.tar.gz'
