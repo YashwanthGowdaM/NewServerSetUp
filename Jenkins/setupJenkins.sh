@@ -43,7 +43,7 @@ echo "Creating working directory..."
 mkdir -p "$WORK_DIR"
 
 echo "Downloading Jenkins backup..."
-curl -u "${BACKUP_USER}:${BACKUP_PASS}" -O "$BACKUP_FILE" "$BACKUP_URL"
+curl -u "${BACKUP_USER}:${BACKUP_PASS}" -O "$BACKUP_URL"
 
 echo "Stopping Jenkins..."
 systemctl stop jenkins
